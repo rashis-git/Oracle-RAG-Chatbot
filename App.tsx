@@ -92,7 +92,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="relative flex flex-col h-full max-w-4xl mx-auto overflow-hidden bg-background md:shadow-2xl md:my-4 md:rounded-2xl border border-white/50">
+    <div className="relative flex flex-col h-screen w-full overflow-hidden bg-background">
       
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
@@ -104,13 +104,13 @@ const App: React.FC = () => {
       {error && <Toast message={error} onClose={() => setError(null)} />}
 
       {/* Header */}
-      <header className="flex-shrink-0 bg-white/60 backdrop-blur-xl border-b border-white/20 px-6 py-4 flex items-center justify-between z-20">
+      <header className="flex-shrink-0 bg-white/60 backdrop-blur-xl border-b border-white/20 px-6 py-4 flex items-center justify-between z-20 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="bg-gradient-to-tr from-primary to-blue-400 p-2 rounded-lg text-white shadow-lg shadow-primary/20">
-            <Sparkles size={20} />
+            <Sparkles size={24} />
           </div>
           <div>
-            <h1 className="font-bold text-lg text-foreground leading-tight">Oracle Agent</h1>
+            <h1 className="font-bold text-xl text-foreground leading-tight">Oracle Agent</h1>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -121,59 +121,62 @@ const App: React.FC = () => {
           </div>
         </div>
         <button className="p-2 hover:bg-black/5 rounded-full transition-colors text-muted-foreground">
-            <Menu size={20} />
+            <Menu size={24} />
         </button>
       </header>
 
       {/* Chat Area */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 scroll-smooth">
-        
-        {messages.length === 0 ? (
-           <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
-               <div className="p-4 bg-white/50 rounded-full mb-4">
-                   <Sparkles size={48} className="text-primary" />
-               </div>
-               <p className="text-muted-foreground">Start a conversation to get help with procurement.</p>
-           </div>
-        ) : (
-             messages.map((msg) => (
-                <MessageBubble key={msg.id} message={msg} />
-            ))
-        )}
+      <main className="flex-1 overflow-y-auto w-full">
+        <div className="max-w-5xl mx-auto h-full flex flex-col p-4 md:p-8 space-y-6">
+            {messages.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center opacity-50">
+                <div className="p-4 bg-white/50 rounded-full mb-4">
+                    <Sparkles size={48} className="text-primary" />
+                </div>
+                <p className="text-muted-foreground text-lg">Start a conversation to get help with procurement.</p>
+            </div>
+            ) : (
+                messages.map((msg) => (
+                    <MessageBubble key={msg.id} message={msg} />
+                ))
+            )}
 
-        {isLoading && <TypingIndicator />}
-        
-        <div ref={messagesEndRef} className="h-2" />
+            {isLoading && <TypingIndicator />}
+            
+            <div ref={messagesEndRef} className="h-2" />
+        </div>
       </main>
 
       {/* Input Area */}
-      <footer className="flex-shrink-0 p-4 md:p-6 bg-white/60 backdrop-blur-xl border-t border-white/20 z-20">
-        <div className="relative flex items-end gap-2 bg-white border border-white/60 shadow-sm rounded-2xl p-2 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all duration-200">
-          <textarea
-            ref={inputRef}
-            value={inputValue}
-            onChange={handleInput}
-            onKeyDown={handleKeyDown}
-            placeholder="Type your request here..."
-            rows={1}
-            className="flex-1 max-h-32 bg-transparent border-0 focus:ring-0 text-foreground placeholder:text-muted-foreground resize-none py-3 px-2 leading-relaxed"
-          />
-          <button
-            onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isLoading}
-            className={`p-3 rounded-xl flex items-center justify-center transition-all duration-200 ${
-              inputValue.trim() && !isLoading
-                ? 'bg-primary text-primary-foreground shadow-md hover:shadow-lg hover:scale-105 active:scale-95'
-                : 'bg-muted text-muted-foreground cursor-not-allowed'
-            }`}
-          >
-            <Send size={18} className={inputValue.trim() && !isLoading ? 'ml-0.5' : ''} />
-          </button>
-        </div>
-        <div className="text-center mt-2">
-            <p className="text-[10px] text-muted-foreground">
-                Press <kbd className="font-sans font-semibold">Enter</kbd> to send, <kbd className="font-sans font-semibold">Shift + Enter</kbd> for new line
-            </p>
+      <footer className="flex-shrink-0 bg-white/60 backdrop-blur-xl border-t border-white/20 z-20">
+        <div className="max-w-4xl mx-auto p-4 md:p-6 w-full">
+            <div className="relative flex items-end gap-2 bg-white border border-white/60 shadow-sm rounded-2xl p-2 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all duration-200">
+            <textarea
+                ref={inputRef}
+                value={inputValue}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+                placeholder="Type your request here..."
+                rows={1}
+                className="flex-1 max-h-32 bg-transparent border-0 focus:ring-0 text-foreground placeholder:text-muted-foreground resize-none py-3 px-2 leading-relaxed text-base"
+            />
+            <button
+                onClick={handleSendMessage}
+                disabled={!inputValue.trim() || isLoading}
+                className={`p-3 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                inputValue.trim() && !isLoading
+                    ? 'bg-primary text-primary-foreground shadow-md hover:shadow-lg hover:scale-105 active:scale-95'
+                    : 'bg-muted text-muted-foreground cursor-not-allowed'
+                }`}
+            >
+                <Send size={20} className={inputValue.trim() && !isLoading ? 'ml-0.5' : ''} />
+            </button>
+            </div>
+            <div className="text-center mt-2">
+                <p className="text-[10px] text-muted-foreground">
+                    Press <kbd className="font-sans font-semibold">Enter</kbd> to send, <kbd className="font-sans font-semibold">Shift + Enter</kbd> for new line
+                </p>
+            </div>
         </div>
       </footer>
     </div>
